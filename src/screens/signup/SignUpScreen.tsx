@@ -8,6 +8,7 @@ import RoundedButton from "../../components/buttons/RoundedButton";
 import TextWithButton from "../../components/buttons/TextWithButton";
 import { useNavigation } from "@react-navigation/native";
 import PhoneNumberInput from "../../components/inputs/PhoneNumberInput";
+import VerificationCodeInput from "../../components/inputs/VerificationCodeInput";
 
 const { colors } = globalStyles;
 
@@ -15,7 +16,8 @@ const SignUpScreen = () => {
 
     const navigation = useNavigation();
 
-    const [phone, setPhone] = useState(0);
+    const [phone, setPhone] = useState('');
+    const [code, setCode] = useState(0);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -34,6 +36,9 @@ const SignUpScreen = () => {
                     <PhoneNumberInput
                         label="Phone Number"
                         setPhone={setPhone}/>
+                    <VerificationCodeInput
+                        label="Code"
+                        setCode={setCode}/>
                     <LineInput
                         label='Your Name'
                         placeholder="John Doe"
