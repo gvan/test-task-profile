@@ -15,6 +15,12 @@ interface CodeCellProps {
     codeRef: any;
 }
 
+interface Code {
+    code: string;
+    focused: boolean;
+    ref: any;
+}
+
 const { colors } = globalStyles;
 
 
@@ -36,36 +42,40 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
 
 const VerificationCodeInput: React.FC<Props> = (props) => {
 
-    const [code, setCode] = useState(['', '', '', '']);
-    const [codeFocus, setCodeFocus] = useState([false, false, false, false]);
-    const codeRef = useRef([useRef(), useRef(), useRef(), useRef()]);
+    const [code, setCode] = useState(Array.from({length: 4}, () => ({
+        code: '',
+        focused: false,
+        ref: useRef()
+    })));
 
     useEffect(() => {
-        if(!code.some(c => c === '')) {
-            var codeResult = Number(code.join(''));
+        if(!code.some(c => c.code === '')) {
+            var codeResult = Number(code.map(c => c.code).join(''));
             props.setCode(codeResult);
         }
     }, [code]);
 
     const setCodeValue = (value: string, i: number) => {
         let codeCopy = [...code];
-        codeCopy[i] = value.replace(/[^0-9]/g, '');
+        codeCopy[i].code = value.replace(/[^0-9]/g, '');
         setCode(codeCopy);
-        if(codeCopy[i] === '') {
+        
+        if(codeCopy[i].code === '') {
             if(i > 0) {
-                codeRef.current[i-1].current.focus();
+                codeCopy[i-1].ref.current.focus();
             }
         } else {
-            if(i < codeRef.current.length - 1) {
-                codeRef.current[i+1].current.focus();
+            if(i < codeCopy.length - 1) {
+                codeCopy[i+1].ref.current.focus();
             }
         }
     }
 
     const setCodeOnFocus = (i: number) => {
-        let codeFocusCopy = codeFocus.map(() => false);
-        codeFocusCopy[i] = true;
-        setCodeFocus(codeFocusCopy);
+        let codeCopy = [...code];
+        codeCopy.forEach(c => { c.focused = false; return c; });
+        codeCopy[i].focused = true;
+        setCode(codeCopy);
     }
 
     return (
@@ -75,11 +85,11 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
                 {code.map((el, i) => {
                     return (
                         <CodeCell
-                            value={code[i]}
+                            value={el.code}
                             onChangeText={(value) => { setCodeValue(value, i) }}
                             onFocus={() => { setCodeOnFocus(i) }}
-                            codeFocused={codeFocus[i]}
-                            codeRef={codeRef.current[i]}
+                            codeFocused={el.focused}
+                            codeRef={el.ref}
                         />
                     );
                 })}
