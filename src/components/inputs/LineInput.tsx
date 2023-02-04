@@ -8,7 +8,7 @@ export interface Props {
     onChangeText: any;
 }
 
-const {colors} = globalStyles;
+const { colors } = globalStyles;
 
 const LineInput: React.FC<Props> = (props) => {
     return (<>
@@ -22,7 +22,8 @@ const LineInput: React.FC<Props> = (props) => {
                 style={st.input}
                 value={props.value}
                 onChangeText={props.onChangeText} />
-        </View></>);
+        </View>
+    </>);
 }
 
 const st = StyleSheet.create({

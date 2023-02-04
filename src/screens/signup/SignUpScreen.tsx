@@ -1,12 +1,13 @@
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import BrandingHeader from "../../components/screens/BrandingHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LineInput from "../../components/inputs/LineInput";
 import globalStyles from "../../assets/styles/globalStyles";
 import LineInputPassword from "../../components/inputs/LineInputPassword";
 import RoundedButton from "../../components/buttons/RoundedButton";
 import TextWithButton from "../../components/buttons/TextWithButton";
 import { useNavigation } from "@react-navigation/native";
+import PhoneNumberInput from "../../components/inputs/PhoneNumberInput";
 
 const { colors } = globalStyles;
 
@@ -30,6 +31,9 @@ const SignUpScreen = () => {
                 <BrandingHeader
                     title="Sign Up To Woorkroom" />
                 <View style={st.formContainer}>
+                    <PhoneNumberInput
+                        label="Phone Number"
+                        setPhone={setPhone}/>
                     <LineInput
                         label='Your Name'
                         placeholder="John Doe"

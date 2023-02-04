@@ -5454,6 +5454,11 @@ react-native-codegen@^0.70.6:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-country-codes-picker@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-country-codes-picker/-/react-native-country-codes-picker-2.2.2.tgz#65e383cb652a2772ae0b4be4c73e92d48e6d30ba"
+  integrity sha512-uzao08Ki1Wk8V+3/EfrSyrWsrghhkYovL71GlilvvI3ZMrhQEHvHOzbo7WNvl+L5tJu/2enYYrNm/7qkWErsSA==
+
 react-native-gradle-plugin@^0.70.3:
   version "0.70.3"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz#cbcf0619cbfbddaa9128701aa2d7b4145f9c4fc8"
