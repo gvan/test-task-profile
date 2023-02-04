@@ -32,12 +32,12 @@ const SignInScreen = () => {
                         label='Your email'
                         placeholder="name@example.com"
                         value={email}
-                        onChangeText={setEmail} />
+                        setValue={setEmail} />
                     <LineInputPassword
                         label='Password'
                         placeholder="••••••"
                         value={password}
-                        onChangeText={setPassword}/>
+                        setValue={setPassword}/>
                     <TouchableOpacity style={st.textButton} >
                         <Text style={st.secondaryLabel}>{'Forgot password?'}</Text>
                     </TouchableOpacity>

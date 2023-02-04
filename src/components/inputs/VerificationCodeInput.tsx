@@ -11,6 +11,7 @@ interface CodeCellProps {
     value: string;
     onChangeText: any;
     onFocus: any;
+    onBackspacePress: any;
     codeFocused: boolean;
     codeRef: any;
 }
@@ -26,12 +27,20 @@ const { colors } = globalStyles;
 
 
 const CodeCell: React.FC<CodeCellProps> = (props) => {
+
+    const onKeyPress = ({ nativeEvent }) => {
+        if (nativeEvent.key === 'Backspace') {
+            props.onBackspacePress();
+        }
+    }
+
     return (
         <View style={[st.codeCellContainer, { borderColor: props.codeFocused ? colors.primary : colors.border }]}>
             <TextInput
                 value={props.value}
                 onChangeText={props.onChangeText}
                 onFocus={props.onFocus}
+                onKeyPress={onKeyPress}
                 maxLength={1}
                 keyboardType='numeric'
                 style={[st.codeCellInput]}
@@ -42,14 +51,14 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
 
 const VerificationCodeInput: React.FC<Props> = (props) => {
 
-    const [code, setCode] = useState(Array.from({length: 4}, () => ({
+    const [code, setCode] = useState(Array.from({ length: 4 }, () => ({
         code: '',
         focused: false,
         ref: useRef()
     })));
 
     useEffect(() => {
-        if(!code.some(c => c.code === '')) {
+        if (!code.some(c => c.code === '')) {
             var codeResult = Number(code.map(c => c.code).join(''));
             props.setCode(codeResult);
         }
@@ -59,14 +68,14 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
         let codeCopy = [...code];
         codeCopy[i].code = value.replace(/[^0-9]/g, '');
         setCode(codeCopy);
-        
-        if(codeCopy[i].code === '') {
-            if(i > 0) {
-                codeCopy[i-1].ref.current.focus();
+
+        if (codeCopy[i].code === '') {
+            if (i > 0) {
+                codeCopy[i - 1].ref.current.focus();
             }
         } else {
-            if(i < codeCopy.length - 1) {
-                codeCopy[i+1].ref.current.focus();
+            if (i < codeCopy.length - 1) {
+                codeCopy[i + 1].ref.current.focus();
             }
         }
     }
@@ -76,6 +85,12 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
         codeCopy.forEach(c => { c.focused = false; return c; });
         codeCopy[i].focused = true;
         setCode(codeCopy);
+    }
+
+    const onBackspacePress = (i: number) => {
+        if (i > 0) {
+            code[i - 1].ref.current.focus();
+        }
     }
 
     return (
@@ -88,6 +103,7 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
                             value={el.code}
                             onChangeText={(value) => { setCodeValue(value, i) }}
                             onFocus={() => { setCodeOnFocus(i) }}
+                            onBackspacePress={() => { onBackspacePress(i) }}
                             codeFocused={el.focused}
                             codeRef={el.ref}
                         />

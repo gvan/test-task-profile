@@ -27,6 +27,10 @@ const SignUpScreen = () => {
         navigation.goBack();
     }
 
+    const onNextPress = () => {
+        navigation.navigate('Profile');
+    }
+
     return <SafeAreaView style={st.container}>
         <ScrollView>
             <View>
@@ -43,24 +47,25 @@ const SignUpScreen = () => {
                         label='Your Name'
                         placeholder="John Doe"
                         value={name}
-                        onChangeText={setName} />
+                        setValue={setName} />
                     <LineInput
                         label="Your Email"
                         placeholder="johndoe@example.com"
                         value={email}
-                        onChangeText={setEmail}/>
+                        setValue={setEmail}/>
                     <LineInputPassword
                         label="Password"
                         placeholder="••••••"
                         value={password}
-                        onChangeText={setPassword}/>
+                        setValue={setPassword}/>
                     <LineInputPassword
                         label="Confirm Password"
                         placeholder="••••••"
                         value={confirmPassword}
-                        onChangeText={setConfirmPassword}/>
+                        setValue={setConfirmPassword}/>
                     <RoundedButton
-                        text="Next"/>
+                        text="Next"
+                        onPress={onNextPress}/>
                     <TextWithButton
                         text="Have Account?"
                         buttonText="Log In"

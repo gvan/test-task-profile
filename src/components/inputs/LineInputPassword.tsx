@@ -7,7 +7,7 @@ export interface Props {
     label: string;
     placeholder: string;
     value: string;
-    onChangeText: any;
+    setValue: any;
 }
 
 const {colors} = globalStyles;
@@ -31,7 +31,7 @@ const LineInputPassword: React.FC<Props> = (props) => {
                 autoCapitalize="none"
                 style={st.input}
                 value={props.value}
-                onChangeText={props.onChangeText} />
+                onChangeText={props.setValue} />
             <TouchableOpacity onPress={onShowPasswordPress}>
                 {secureText ? <EyeOpen /> : <EyeClose />}
             </TouchableOpacity>

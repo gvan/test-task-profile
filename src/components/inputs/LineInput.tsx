@@ -5,14 +5,15 @@ export interface Props {
     label: string;
     placeholder: string;
     value: string;
-    onChangeText: any;
+    setValue: any;
+    labelStyle: any;
 }
 
 const { colors } = globalStyles;
 
 const LineInput: React.FC<Props> = (props) => {
     return (<>
-        <Text style={st.inputLabel}>{props.label}</Text>
+        <Text style={[st.inputLabel, props.labelStyle]}>{props.label}</Text>
         <View style={st.inputContainer}>
             <TextInput
                 placeholder={props.placeholder}
@@ -21,7 +22,7 @@ const LineInput: React.FC<Props> = (props) => {
                 keyboardType="email-address"
                 style={st.input}
                 value={props.value}
-                onChangeText={props.onChangeText} />
+                onChangeText={props.setValue} />
         </View>
     </>);
 }
