@@ -8,6 +8,8 @@ import RoundedButton from "../../components/buttons/RoundedButton";
 import LineInput from "../../components/inputs/LineInput";
 import LineInputPassword from "../../components/inputs/LineInputPassword";
 import TextWithButton from "../../components/buttons/TextWithButton";
+import userApi from "../../services/api/UserApi";
+import { UserSignUp } from "../../types";
 
 const { colors } = globalStyles;
 
@@ -15,10 +17,23 @@ const SignInScreen = () => {
 
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('ivan@gmail.com');
+    const [password, setPassword] = useState('password');
 
-    const onCreateAccountPress = () => {
+    const onLoginPress = async () => {
+        const res = await userApi.loginUser(email, password);
+        console.log(`res ${JSON.stringify(res)}`)
+        if(res.data) {
+            navigation.reset({
+                index: 0,
+                routes: [{name: 'Profile'}],
+            });
+        } else {
+
+        }
+    }
+
+    const onCreateAccountPress = async () => {
         navigation.navigate('SignUp');
     }
 
@@ -42,7 +57,8 @@ const SignInScreen = () => {
                         <Text style={st.secondaryLabel}>{'Forgot password?'}</Text>
                     </TouchableOpacity>
                     <RoundedButton
-                        text="Log In" />
+                        text="Log In"
+                        onPress={onLoginPress} />
                     <TextWithButton
                         text='New User?'
                         buttonText='Create Account'

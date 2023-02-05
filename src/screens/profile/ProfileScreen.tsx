@@ -5,10 +5,13 @@ import { User } from "../../types";
 import LineInput from "../../components/inputs/LineInput";
 import { useState } from "react";
 import RoundedButton from "../../components/buttons/RoundedButton";
+import { useNavigation } from "@react-navigation/native";
 
 const { colors } = globalStyles;
 
 const ProfileScreen = () => {
+
+    const navigation = useNavigation();
 
     const user = {
         name: 'Mike Tyson',
@@ -25,6 +28,13 @@ const ProfileScreen = () => {
     const [position, setPosition] = useState(user.position);
     const [skype, setSkype] = useState(user.skype);
 
+    const onLogOutPress = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{name: 'SignIn'}],
+        });
+    }
+
     const onSavePress = () => {
 
     }
@@ -34,7 +44,7 @@ const ProfileScreen = () => {
             <View style={st.content}>
                 <View style={st.headerContainer}>
                     <Text style={st.headerTitle}>{'Edit Profile'}</Text>
-                    <TouchableOpacity style={st.headerAction}>
+                    <TouchableOpacity style={st.headerAction} onPress={onLogOutPress}>
                         <Text style={st.headerActionText}>{'Log Out'}</Text>
                     </TouchableOpacity>
                 </View>

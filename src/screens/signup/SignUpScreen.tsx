@@ -9,6 +9,7 @@ import TextWithButton from "../../components/buttons/TextWithButton";
 import { useNavigation } from "@react-navigation/native";
 import PhoneNumberInput from "../../components/inputs/PhoneNumberInput";
 import VerificationCodeInput from "../../components/inputs/VerificationCodeInput";
+import userApi from "../../services/api/UserApi";
 
 const { colors } = globalStyles;
 
@@ -27,8 +28,22 @@ const SignUpScreen = () => {
         navigation.goBack();
     }
 
-    const onNextPress = () => {
-        navigation.navigate('Profile');
+    const onNextPress = async () => {
+        const res = await userApi.registerUser({
+            name: 'Ivan Hanzha',
+            email: 'ivan@gmail.com',
+            password: 'password',
+            phoneNumber: '+380961112233'
+        } as UserSignUp);
+        console.log(`register response ${JSON.stringify(res)}`);
+        if(res.data) {
+            navigation.reset({
+                index: 0,
+                routes: [{name: 'Profile'}],
+            });
+        } else {
+
+        }
     }
 
     return <SafeAreaView style={st.container}>
