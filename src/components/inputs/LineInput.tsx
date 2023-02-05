@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import globalStyles from "../../assets/styles/globalStyles";
+import InputError from "../errors/InputError";
 
 export interface Props {
     label: string;
@@ -35,7 +36,7 @@ const LineInput: React.FC<Props> = (props) => {
                 onChangeText={props.setValue}
                 onSubmitEditing={props.onSubmitEditing} />
         </View>
-        {(props.error && props.error !== '') && <Text style={st.inputError}>{props.error}</Text>}
+        {(props.error && props.error !== '') && <InputError>{props.error}</InputError>}
     </>);
 }
 
@@ -59,11 +60,6 @@ const st = StyleSheet.create({
         color: colors.secondaryText,
         marginTop: 40,
     },
-    inputError: {
-        fontSize: 14,
-        lineHeight: 21,
-        color: colors.errorText,
-    }
 });
 
 export default LineInput;

@@ -6,6 +6,9 @@ const userApi = {
     registerUser: async (user: UserSignUp): Promise<UserResponse> => {
         return registerUser(user); 
     },
+    checkVerificationCode: (phone: string, code: string): Promise<boolean> => {
+        return true;
+    },
     loginUser: async (email: string, password: string): Promise<UserResponse> => {
         return loginUser(email, password);
     },

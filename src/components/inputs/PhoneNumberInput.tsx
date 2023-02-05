@@ -3,6 +3,7 @@ import globalStyles from "../../assets/styles/globalStyles";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "../../assets/icons";
 import { CountryPicker } from "react-native-country-codes-picker";
+import InputError from "../errors/InputError";
 
 export interface Props {
     label: string;
@@ -11,6 +12,7 @@ export interface Props {
     inputRef: any;
     onSubmitEditing: any;
     blurOnSubmit: boolean;
+    error: string;
 }
 
 const { colors } = globalStyles;
@@ -24,20 +26,18 @@ const PhoneNumberInput: React.FC<Props> = (props) => {
     const [phoneFormated, setPhoneFormated] = useState('');
 
     useEffect(() => {
-        if(codeWasSelected && phone && phone !== '') {
+        if(phone && phone !== '') {
             props.setPhone(`${code}${phone}`);
         }
     }, [codeWasSelected, phone]);
 
     const onPhoneChange = (text) => {
-
         const cleaned = ('' + text).replace(/\D/g, '')
-        const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{2})(\d{2})$/)
-        if (match) {
+        const match = cleaned.match(/^(\d{3})(\d{3})(\d{2})(\d{2})$/)
+        if (match && !text.includes('-')) {
             setPhone(text);
             
-            let intlCode = (match[1] ? '+1 ' : ''),
-                number = [intlCode, match[2], ' ', match[3], '-', match[4], '-', match[5]].join('');
+            let number = match[1] + ' ' + match[2] + '-' + match[3] + '-' + match[4];
             setPhoneFormated(number);
         } else {
             setPhoneFormated(text);
@@ -76,7 +76,7 @@ const PhoneNumberInput: React.FC<Props> = (props) => {
                     keyboardType="phone-pad"
                     textContentType="telephoneNumber"
                     dataDetectorTypes='phoneNumber'
-                    maxLength={10}
+                    maxLength={13}
                     value={phoneFormated}
                     onChangeText={onPhoneChange}
                     ref={props.inputRef}
@@ -85,6 +85,7 @@ const PhoneNumberInput: React.FC<Props> = (props) => {
                     onSubmitEditing={props.onSubmitEditing} />
             </View>
         </View>
+        {(props.error && props.error !== '') && <InputError>{props.error}</InputError>}
         <CountryPicker
             show={showCodePicker}
             style={{

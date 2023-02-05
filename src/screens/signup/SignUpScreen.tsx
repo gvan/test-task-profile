@@ -10,8 +10,13 @@ import { useNavigation } from "@react-navigation/native";
 import PhoneNumberInput from "../../components/inputs/PhoneNumberInput";
 import VerificationCodeInput from "../../components/inputs/VerificationCodeInput";
 import userApi from "../../services/api/UserApi";
+import GlobalText from "../../assets/text/GlobalText";
+import { validateEmail, validatePassword } from "../../utils";
+import InputError from "../../components/errors/InputError";
+import { UserSignUp } from "../../types";
 
 const { colors } = globalStyles;
+const {errors} = GlobalText;
 
 const SignUpScreen = () => {
 
@@ -30,6 +35,7 @@ const SignUpScreen = () => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const [generalError, setGeneralError] = useState('');
 
     const codeRef = useRef();
     const nameRef = useRef();
@@ -42,45 +48,123 @@ const SignUpScreen = () => {
     }
 
     const onNextPress = async () => {
-        const res = await userApi.registerUser({
-            name: 'Ivan Hanzha',
-            email: 'ivan@gmail.com',
-            password: 'password',
-            phoneNumber: '+380961112233'
-        } as UserSignUp);
-        console.log(`register response ${JSON.stringify(res)}`);
-        if(res.data) {
-            navigation.reset({
-                index: 0,
-                routes: [{name: 'Profile'}],
-            });
-        } else {
-
+        console.log('onNextPress');
+        if(validateRegistrationForm()) {
+            const user = {
+                name: name,
+                email: email,
+                password: password,
+                phoneNumber: phone
+            } as UserSignUp;
+            console.log(`user ${JSON.stringify(user)}`);
+            const res = await userApi.registerUser(user);
+            console.log(`register response ${JSON.stringify(res)}`);
+            if(res.data) {
+                navigation.reset({
+                    index: 0,
+                    routes: [{name: 'Profile'}],
+                });
+            } else {
+                setGeneralError(res.error);
+            }
         }
     }
 
-    const onPhoneSubmit = () => {
-        codeRef.current.focus();
-    }
+    const validateRegistrationForm = () => {
+        setPhoneError('');
+        setCodeError('');
+        setNameError('');
+        setEmailError('');
+        setPasswordError('');
+        setConfirmPasswordError('');
+        setGeneralError('');
 
-    const onCodeSubmit = () => {
-        nameRef.current.focus();
-    }
+        if(phone === '') {
+            console.log(`setPhoneError`);
+            setPhoneError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
 
-    const onNameSubmit = () => {
-        emailRef.current.focus();
-    }
+        if(code === '') {
+            setCodeError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
 
-    const onEmailSubmit = () => {
-        passwordRef.current.focus();
-    }
+        if(name === '') {
+            setNameError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
 
-    const onPasswordSubmit = () => {
-        confirmPasswordRef.current.focus();
+        if(name.length < 3) {
+            setNameError(errors.NAME_MIN);
+            return false;
+        }
+
+        if(name.length > 64) {
+            setNameError(errors.NAME_MAX);
+            return false;
+        }
+
+        if(email === '') {
+            setEmailError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
+
+        if(!validateEmail(email)) {
+            setEmailError(errors.INVALID_EMAIL_FORMAT);
+            return false;
+        }
+
+        if(password === '') {
+            setPasswordError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
+
+        if(password.length < 8) {
+            setPasswordError(errors.PASSWORD_MIN);
+            return false;
+        }
+
+        if(password.length > 32) {
+            setPasswordError(errors.PASSWORD_MAX);
+            return false;
+        }
+
+        if(!validatePassword(password)) {
+            setPasswordError(errors.INVALID_PASSWORD_FORMAT);
+            return false;
+        }
+
+        if(confirmPassword === '') {
+            setConfirmPasswordError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
+
+        if(confirmPassword.length < 8) {
+            setConfirmPasswordError(errors.PASSWORD_MIN);
+            return false;
+        }
+
+        if(confirmPassword.length > 32) {
+            setConfirmPasswordError(errors.PASSWORD_MAX);
+            return false;
+        }
+
+        if(!validatePassword(confirmPassword)) {
+            setConfirmPasswordError(errors.INVALID_PASSWORD_FORMAT);
+            return false;
+        }
+
+        if(password != confirmPassword) {
+            setConfirmPasswordError(errors.PASSWORDS_DO_NOT_MATCH);
+            return false;
+        }
+
+        return true;
     }
 
     return <SafeAreaView style={st.container}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
             <View>
                 <BrandingHeader
                     title="Sign Up To Woorkroom" />
@@ -89,15 +173,17 @@ const SignUpScreen = () => {
                         label="Phone Number"
                         setPhone={setPhone}
                         returnKeyType="next"
-                        onSubmitEditing={onPhoneSubmit}
-                        blurOnSubmit={false}/>
+                        onSubmitEditing={() => codeRef.current.focus()}
+                        blurOnSubmit={false}
+                        error={phoneError}/>
                     <VerificationCodeInput
                         label="Code"
                         setCode={setCode}
                         returnKeyType="next"
                         inputRef={codeRef}
-                        onSubmitEditing={onCodeSubmit}
-                        blurOnSubmit={false}/>
+                        onSubmitEditing={() => nameRef.current.focus()}
+                        blurOnSubmit={false}
+                        error={codeError}/>
                     <LineInput
                         label='Your Name'
                         placeholder="John Doe"
@@ -105,17 +191,21 @@ const SignUpScreen = () => {
                         setValue={setName}
                         returnKeyType="next"
                         inputRef={nameRef}
-                        onSubmitEditing={onNameSubmit}
-                        blurOnSubmit={false}/>
+                        onSubmitEditing={() => emailRef.current.focus()}
+                        blurOnSubmit={false}
+                        error={nameError}/>
                     <LineInput
                         label="Your Email"
                         placeholder="johndoe@example.com"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
                         value={email}
                         setValue={setEmail}
                         returnKeyType="next"
                         inputRef={emailRef}
-                        onSubmitEditing={onEmailSubmit}
-                        blurOnSubmit={false}/>
+                        onSubmitEditing={() => passwordRef.current.focus()}
+                        blurOnSubmit={false}
+                        error={emailError}/>
                     <LineInputPassword
                         label="Password"
                         placeholder="••••••"
@@ -123,22 +213,25 @@ const SignUpScreen = () => {
                         setValue={setPassword}
                         returnKeyType="next"
                         inputRef={passwordRef}
-                        onSubmitEditing={onPasswordSubmit}
-                        blurOnSubmit={false}/>
+                        onSubmitEditing={() => confirmPasswordRef.current.focus()}
+                        blurOnSubmit={false}
+                        error={passwordError}/>
                     <LineInputPassword
                         label="Confirm Password"
                         placeholder="••••••"
                         value={confirmPassword}
                         setValue={setConfirmPassword}
                         returnKeyType="done"
-                        inputRef={confirmPasswordRef}/>
+                        inputRef={confirmPasswordRef}
+                        error={confirmPasswordError}/>
+                    {(generalError && generalError !== '') && <InputError>{generalError}</InputError>}
                     <RoundedButton
                         text="Next"
-                        onPress={onNextPress}/>
+                        onPress={() => onNextPress()}/>
                     <TextWithButton
                         text="Have Account?"
                         buttonText="Log In"
-                        onPress={onSignInPress}/>
+                        onPress={() => onSignInPress()}/>
                 </View>
 
             </View>

@@ -11,8 +11,10 @@ import TextWithButton from "../../components/buttons/TextWithButton";
 import userApi from "../../services/api/UserApi";
 import { UserSignUp } from "../../types";
 import { validateEmail, validatePassword } from "../../utils";
+import GlobalText from "../../assets/text/GlobalText";
 
 const { colors } = globalStyles;
+const {errors} = GlobalText;
 
 const SignInScreen = () => {
 
@@ -20,7 +22,7 @@ const SignInScreen = () => {
 
     const [email, setEmail] = useState('ivan1@gmail.com');
     const [password, setPassword] = useState('password');
-    
+
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
@@ -54,34 +56,34 @@ const SignInScreen = () => {
         setPasswordError('');
 
         if(email === '') {
-            setEmailError('Empty field');
-            return false;
-        }
-
-        if(password === '') {
-            setPasswordError('Empty field');
+            setEmailError(errors.THIS_FIELD_CANNOT_BE_EMPTY);
             return false;
         }
 
         if(!validateEmail(email)) {
-            setEmailError('Invalid email format');
+            setEmailError(errors.INVALID_EMAIL_FORMAT);
+            return false;
+        }
+
+        if(password === '') {
+            setPasswordError(errors.THIS_FIELD_CANNOT_BE_EMPTY);
             return false;
         }
 
         if(password.length < 8) {
-            setPasswordError('Password must have at least 8 characters');
+            setPasswordError(errors.PASSWORD_MIN);
             return false;
         }
 
         if(password.length > 32) {
-            setPasswordError('Password can contain up to 32 characters');
+            setPasswordError(errors.PASSWORD_MAX);
             return false;
         }
         return true;
     }
 
     return <SafeAreaView style={st.container}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
             <View>
                 <BrandingHeader
                     title='Log In To Woorkroom' />

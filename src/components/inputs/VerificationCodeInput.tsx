@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import globalStyles from "../../assets/styles/globalStyles";
 import { useEffect, useReducer, useRef, useState } from "react";
+import InputError from "../errors/InputError";
 
 export interface Props {
     label: string;
@@ -9,6 +10,7 @@ export interface Props {
     inputRef: any;
     onSubmitEditing: any;
     blurOnSubmit: boolean;
+    error: string;
 }
 
 interface CodeCellProps {
@@ -138,6 +140,7 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
                 {code.map((el, i) => {
                     return (
                         <CodeCell
+                            key={i.toString()}
                             value={el.code}
                             onChangeText={(value) => { setCodeValue(value, i) }}
                             onFocus={() => { setCodeOnFocus(i) }}
@@ -152,6 +155,7 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
                     );
                 })}
             </View>
+            {(props.error && props.error !== '') && <InputError>{props.error}</InputError>}
         </>
     );
 }
