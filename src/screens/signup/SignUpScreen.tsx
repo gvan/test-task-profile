@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import BrandingHeader from "../../components/screens/BrandingHeader";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LineInput from "../../components/inputs/LineInput";
 import globalStyles from "../../assets/styles/globalStyles";
 import LineInputPassword from "../../components/inputs/LineInputPassword";
@@ -24,6 +24,19 @@ const SignUpScreen = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const [phoneError, setPhoneError] = useState('');
+    const [codeError, setCodeError] = useState('');
+    const [nameError, setNameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+    const codeRef = useRef();
+    const nameRef = useRef();
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const confirmPasswordRef = useRef();
+
     const onSignInPress = () => {
         navigation.goBack();
     }
@@ -46,6 +59,26 @@ const SignUpScreen = () => {
         }
     }
 
+    const onPhoneSubmit = () => {
+        codeRef.current.focus();
+    }
+
+    const onCodeSubmit = () => {
+        nameRef.current.focus();
+    }
+
+    const onNameSubmit = () => {
+        emailRef.current.focus();
+    }
+
+    const onEmailSubmit = () => {
+        passwordRef.current.focus();
+    }
+
+    const onPasswordSubmit = () => {
+        confirmPasswordRef.current.focus();
+    }
+
     return <SafeAreaView style={st.container}>
         <ScrollView>
             <View>
@@ -54,30 +87,51 @@ const SignUpScreen = () => {
                 <View style={st.formContainer}>
                     <PhoneNumberInput
                         label="Phone Number"
-                        setPhone={setPhone}/>
+                        setPhone={setPhone}
+                        returnKeyType="next"
+                        onSubmitEditing={onPhoneSubmit}
+                        blurOnSubmit={false}/>
                     <VerificationCodeInput
                         label="Code"
-                        setCode={setCode}/>
+                        setCode={setCode}
+                        returnKeyType="next"
+                        inputRef={codeRef}
+                        onSubmitEditing={onCodeSubmit}
+                        blurOnSubmit={false}/>
                     <LineInput
                         label='Your Name'
                         placeholder="John Doe"
                         value={name}
-                        setValue={setName} />
+                        setValue={setName}
+                        returnKeyType="next"
+                        inputRef={nameRef}
+                        onSubmitEditing={onNameSubmit}
+                        blurOnSubmit={false}/>
                     <LineInput
                         label="Your Email"
                         placeholder="johndoe@example.com"
                         value={email}
-                        setValue={setEmail}/>
+                        setValue={setEmail}
+                        returnKeyType="next"
+                        inputRef={emailRef}
+                        onSubmitEditing={onEmailSubmit}
+                        blurOnSubmit={false}/>
                     <LineInputPassword
                         label="Password"
                         placeholder="••••••"
                         value={password}
-                        setValue={setPassword}/>
+                        setValue={setPassword}
+                        returnKeyType="next"
+                        inputRef={passwordRef}
+                        onSubmitEditing={onPasswordSubmit}
+                        blurOnSubmit={false}/>
                     <LineInputPassword
                         label="Confirm Password"
                         placeholder="••••••"
                         value={confirmPassword}
-                        setValue={setConfirmPassword}/>
+                        setValue={setConfirmPassword}
+                        returnKeyType="done"
+                        inputRef={confirmPasswordRef}/>
                     <RoundedButton
                         text="Next"
                         onPress={onNextPress}/>

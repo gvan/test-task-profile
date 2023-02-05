@@ -6,7 +6,11 @@ import { CountryPicker } from "react-native-country-codes-picker";
 
 export interface Props {
     label: string;
-    setPhone: any,
+    setPhone: any;
+    returnKeyType: string;
+    inputRef: any;
+    onSubmitEditing: any;
+    blurOnSubmit: boolean;
 }
 
 const { colors } = globalStyles;
@@ -74,7 +78,11 @@ const PhoneNumberInput: React.FC<Props> = (props) => {
                     dataDetectorTypes='phoneNumber'
                     maxLength={10}
                     value={phoneFormated}
-                    onChangeText={onPhoneChange} />
+                    onChangeText={onPhoneChange}
+                    ref={props.inputRef}
+                    returnKeyType={props.returnKeyType ? props.returnKeyType : 'default'}
+                    blurOnSubmit={props.blurOnSubmit !== undefined ? props.blurOnSubmit : true}
+                    onSubmitEditing={props.onSubmitEditing} />
             </View>
         </View>
         <CountryPicker

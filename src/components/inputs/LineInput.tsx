@@ -7,6 +7,13 @@ export interface Props {
     value: string;
     setValue: any;
     labelStyle: any;
+    error: string;
+    returnKeyType: string;
+    keyboardType: string;
+    autoCapitalize: string;
+    inputRef: any;
+    onSubmitEditing: any;
+    blurOnSubmit: boolean;
 }
 
 const { colors } = globalStyles;
@@ -18,12 +25,17 @@ const LineInput: React.FC<Props> = (props) => {
             <TextInput
                 placeholder={props.placeholder}
                 placeholderTextColor={colors.mainText}
-                autoCapitalize="none"
-                keyboardType="email-address"
+                autoCapitalize={props.autoCapitalize ? props.autoCapitalize : 'sentences'}
+                keyboardType={props.keyboardType ? props.keyboardType : 'default'}
+                returnKeyType={props.returnKeyType ? props.returnKeyType : 'default'}
+                blurOnSubmit={props.blurOnSubmit !== undefined ? props.blurOnSubmit : true}
+                ref={props.inputRef}
                 style={st.input}
                 value={props.value}
-                onChangeText={props.setValue} />
+                onChangeText={props.setValue}
+                onSubmitEditing={props.onSubmitEditing} />
         </View>
+        {(props.error && props.error !== '') && <Text style={st.inputError}>{props.error}</Text>}
     </>);
 }
 
@@ -47,6 +59,11 @@ const st = StyleSheet.create({
         color: colors.secondaryText,
         marginTop: 40,
     },
+    inputError: {
+        fontSize: 14,
+        lineHeight: 21,
+        color: colors.errorText,
+    }
 });
 
 export default LineInput;

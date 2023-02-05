@@ -7,6 +7,7 @@ export interface GlobalColors {
     background: string;
     mainText: string;
     secondaryText: string;
+    errorText: string;
     border: string;
 }
 
@@ -15,6 +16,7 @@ const colors = {
     background: '#fff',
     mainTextColor: '#1f1d1d',
     secondaryText: '#9795a4',
+    errorText: '#ed4337',
     border: '#d7d7d7',
 } as GlobalColors;
 

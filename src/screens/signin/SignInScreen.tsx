@@ -1,7 +1,7 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { EyeClose, EyeOpen, Logo } from "../../assets/icons"
 import globalStyles from "../../assets/styles/globalStyles"
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import BrandingHeader from "../../components/screens/BrandingHeader";
 import RoundedButton from "../../components/buttons/RoundedButton";
@@ -10,6 +10,7 @@ import LineInputPassword from "../../components/inputs/LineInputPassword";
 import TextWithButton from "../../components/buttons/TextWithButton";
 import userApi from "../../services/api/UserApi";
 import { UserSignUp } from "../../types";
+import { validateEmail, validatePassword } from "../../utils";
 
 const { colors } = globalStyles;
 
@@ -17,24 +18,66 @@ const SignInScreen = () => {
 
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState('ivan@gmail.com');
+    const [email, setEmail] = useState('ivan1@gmail.com');
     const [password, setPassword] = useState('password');
+    
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+
+    const passwordRef = useRef();
 
     const onLoginPress = async () => {
-        const res = await userApi.loginUser(email, password);
-        console.log(`res ${JSON.stringify(res)}`)
-        if(res.data) {
-            navigation.reset({
-                index: 0,
-                routes: [{name: 'Profile'}],
-            });
-        } else {
-
+        if(validateLoginForm()) {
+            const res = await userApi.loginUser(email, password);
+            console.log(`res ${JSON.stringify(res)}`)
+            if(res.data) {
+                navigation.reset({
+                    index: 0,
+                    routes: [{name: 'Profile'}],
+                });
+            } else {
+                setEmailError(res.error);
+            }
         }
     }
 
     const onCreateAccountPress = async () => {
         navigation.navigate('SignUp');
+    }
+
+    const onEmailSubmit = () => {
+        passwordRef.current.focus();
+    }
+
+    const validateLoginForm = (): boolean => {
+        setEmailError('');
+        setPasswordError('');
+
+        if(email === '') {
+            setEmailError('Empty field');
+            return false;
+        }
+
+        if(password === '') {
+            setPasswordError('Empty field');
+            return false;
+        }
+
+        if(!validateEmail(email)) {
+            setEmailError('Invalid email format');
+            return false;
+        }
+
+        if(password.length < 8) {
+            setPasswordError('Password must have at least 8 characters');
+            return false;
+        }
+
+        if(password.length > 32) {
+            setPasswordError('Password can contain up to 32 characters');
+            return false;
+        }
+        return true;
     }
 
     return <SafeAreaView style={st.container}>
@@ -46,13 +89,22 @@ const SignInScreen = () => {
                     <LineInput
                         label='Your email'
                         placeholder="name@example.com"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        returnKeyType="next"
+                        blurOnSubmit={false}
                         value={email}
-                        setValue={setEmail} />
+                        setValue={setEmail}
+                        error={emailError}
+                        onSubmitEditing={onEmailSubmit} />
                     <LineInputPassword
                         label='Password'
                         placeholder="••••••"
+                        returnKeyType="done"
                         value={password}
-                        setValue={setPassword}/>
+                        setValue={setPassword}
+                        error={passwordError}
+                        inputRef={passwordRef}/>
                     <TouchableOpacity style={st.textButton} >
                         <Text style={st.secondaryLabel}>{'Forgot password?'}</Text>
                     </TouchableOpacity>

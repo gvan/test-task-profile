@@ -5,6 +5,10 @@ import { useEffect, useReducer, useRef, useState } from "react";
 export interface Props {
     label: string;
     setCode: any;
+    returnKeyType: string;
+    inputRef: any;
+    onSubmitEditing: any;
+    blurOnSubmit: boolean;
 }
 
 interface CodeCellProps {
@@ -14,6 +18,10 @@ interface CodeCellProps {
     onBackspacePress: any;
     codeFocused: boolean;
     codeRef: any;
+    onSubmitEditing: any;
+    index: number;
+    returnKeyType: string;
+    blurOnSubmit: string;
 }
 
 interface Code {
@@ -22,15 +30,30 @@ interface Code {
     ref: any;
 }
 
+const CODE_LENGTH = 4;
 const { colors } = globalStyles;
-
-
 
 const CodeCell: React.FC<CodeCellProps> = (props) => {
 
     const onKeyPress = ({ nativeEvent }) => {
         if (nativeEvent.key === 'Backspace') {
             props.onBackspacePress();
+        }
+    }
+
+    const getReturnKeyType = () => {
+        if(props.index < CODE_LENGTH - 1) {
+            return "next";
+        } else {
+            return props.returnKeyType ? props.returnKeyType : "default";
+        }
+    }
+
+    const getBlurOnSubmit = () => {
+        if(props.index < CODE_LENGTH - 1) {
+            return false;
+        } else {
+            return props.blurOnSubmit !== undefined ? props.blurOnSubmit : true;
         }
     }
 
@@ -44,17 +67,26 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
                 maxLength={1}
                 keyboardType='numeric'
                 style={[st.codeCellInput]}
-                ref={props.codeRef} />
+                ref={props.codeRef}
+                returnKeyType={getReturnKeyType()}
+                onSubmitEditing={props.onSubmitEditing}
+                blurOnSubmit={getBlurOnSubmit()}/>
         </View>
     );
 }
 
 const VerificationCodeInput: React.FC<Props> = (props) => {
 
-    const [code, setCode] = useState(Array.from({ length: 4 }, () => ({
+    const [code, setCode] = useState(Array.from({ length: CODE_LENGTH }, (e, i) => ({
         code: '',
         focused: false,
-        ref: useRef()
+        ref: (i === 0 && props.inputRef) ? props.inputRef : useRef(),
+        onSubmitEditing: (i === CODE_LENGTH -1) ? () => {
+            if(props.onSubmitEditing) props.onSubmitEditing();
+            clearCodesFocus();
+        } : () => {
+            code[i+1].ref.current.focus();
+        },
     })));
 
     useEffect(() => {
@@ -87,6 +119,12 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
         setCode(codeCopy);
     }
 
+    const clearCodesFocus = () => {
+        let codeCopy = [...code];
+        codeCopy.forEach(c => {c.focused = false; return c;})
+        setCode(codeCopy);
+    }
+
     const onBackspacePress = (i: number) => {
         if (i > 0) {
             code[i - 1].ref.current.focus();
@@ -106,6 +144,10 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
                             onBackspacePress={() => { onBackspacePress(i) }}
                             codeFocused={el.focused}
                             codeRef={el.ref}
+                            index={i}
+                            returnKeyType={props.returnKeyType}
+                            onSubmitEditing={el.onSubmitEditing}
+                            blurOnSubmit={props.blurOnSubmit}
                         />
                     );
                 })}

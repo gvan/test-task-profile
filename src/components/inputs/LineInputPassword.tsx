@@ -8,6 +8,11 @@ export interface Props {
     placeholder: string;
     value: string;
     setValue: any;
+    error: string;
+    returnKeyType: string;
+    inputRef: any;
+    onSubmitEditing: any;
+    blurOnSubmit: boolean;
 }
 
 const {colors} = globalStyles;
@@ -17,7 +22,6 @@ const LineInputPassword: React.FC<Props> = (props) => {
     const [secureText, setSecureText] = useState(true);
 
     const onShowPasswordPress = () => {
-        console.log('onShowPassword');
         setSecureText(!secureText)
     }
 
@@ -29,13 +33,18 @@ const LineInputPassword: React.FC<Props> = (props) => {
                 placeholderTextColor={colors.mainText}
                 secureTextEntry={secureText}
                 autoCapitalize="none"
+                returnKeyType={props.returnKeyType}
+                blurOnSubmit={props.blurOnSubmit !== undefined ? props.blurOnSubmit : true}
+                ref={props.inputRef}
                 style={st.input}
                 value={props.value}
-                onChangeText={props.setValue} />
+                onChangeText={props.setValue}
+                onSubmitEditing={props.onSubmitEditing} />
             <TouchableOpacity onPress={onShowPasswordPress}>
                 {secureText ? <EyeOpen /> : <EyeClose />}
             </TouchableOpacity>
         </View>
+        {(props.error && props.error !== '') && <Text style={st.inputError}>{props.error}</Text>}
     </>);
 }
 
@@ -59,6 +68,11 @@ const st = StyleSheet.create({
         color: colors.secondaryText,
         marginTop: 40,
     },
+    inputError: {
+        fontSize: 14,
+        lineHeight: 21,
+        color: colors.errorText,
+    }
 });
 
 export default LineInputPassword;
