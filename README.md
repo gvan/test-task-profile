@@ -1,3 +1,7 @@
 React Native test task
 
-![Alt text](/readme_assets/images/SignIn.jpeg?raw=true "SignIn") ![Alt text](/readme_assets/images/SignUp.jpeg?raw=true "SignUp") ![Alt text](/readme_assets/images/Profile.jpeg?raw=true "Profile") 
+<p align="left">
+    <img width=200 title="SignIn" src="./readme_assets/images/SignIn.jpeg">
+    <img width=200 title="SignUp" src="./readme_assets/images/SignUp.jpeg">
+    <img width=200 title="Profile" src="./readme_assets/images/Profile.jpeg">
+</p>
