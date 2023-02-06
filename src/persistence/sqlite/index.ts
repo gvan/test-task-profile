@@ -1,5 +1,6 @@
 import { getUserDBConnection, createUserTables, saveUser, 
-    getUserByEmail, getUserById, getUserByCredentials, updateUserById } from "./UserDB";
+    getUserByEmail, getUserById, getUserByCredentials, updateUserById,
+    updateUserAvatarById } from "./UserDB";
 
 export {getUserDBConnection, createUserTables, saveUser, getUserByEmail,
-    getUserById, getUserByCredentials, updateUserById};
+    getUserById, getUserByCredentials, updateUserById, updateUserAvatarById};

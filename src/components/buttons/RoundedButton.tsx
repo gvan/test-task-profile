@@ -6,7 +6,7 @@ export interface Props {
     onPress(): void;
 }
 
-const {colors} = globalStyles;
+const {colors, fonts} = globalStyles;
 
 const RoundedButton: React.FC<Props> = ({text, onPress}) => {
     return (<TouchableOpacity 
@@ -28,7 +28,8 @@ const st = StyleSheet.create({
     },
     buttonLabel: {
         fontSize: 18,
-        color: colors.mainText
+        color: colors.mainText,
+        fontFamily: fonts.mainMedium,
     },
 });
 

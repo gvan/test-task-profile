@@ -1,5 +1,6 @@
 export interface GlobalStyles {
     colors: GlobalColors;
+    fonts: GlobalFonts;
 }
 
 export interface GlobalColors {
@@ -11,6 +12,10 @@ export interface GlobalColors {
     border: string;
 }
 
+export interface GlobalFonts {
+    mainMedium: string;
+}
+
 const colors = {
     primary: '#ffc612',
     background: '#fff',
@@ -20,8 +25,13 @@ const colors = {
     border: '#d7d7d7',
 } as GlobalColors;
 
+const fonts = {
+    mainMedium: 'Poppins-Medium',
+} as GlobalFonts;
+
 const globalStyles = {
     colors: colors,
+    fonts: fonts,
 } as GlobalStyles;
 
 export default globalStyles;

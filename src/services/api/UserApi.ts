@@ -1,7 +1,7 @@
 import { getDBConnection, getUserByCredentials, saveUser } from "../../persistence/sqlite";
 import { User, UserResponse, UserSignUp } from "../../types";
 import { loginUser, registerUser, updateUser } from "../accounting";
-import { getUser } from "../accounting/UserController";
+import { getUser, updateUserAvatar } from "../accounting/UserController";
 
 const userApi = {
     registerUser: async (user: UserSignUp): Promise<UserResponse> => {
@@ -16,8 +16,11 @@ const userApi = {
     getUser: async (id: string): Promise<UserResponse> => {
         return getUser(id);
     },
-    updateUser: async (user: User): Promise<UserResponse> => {
+    updateUserInfo: async (user: User): Promise<UserResponse> => {
         return updateUser(user);
+    },
+    updateUserAvatar: async (id: string, avatar: string): Promise<UserResponse> => {
+        return updateUserAvatar(id, avatar);
     }
 };
 

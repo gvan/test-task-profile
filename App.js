@@ -3,6 +3,7 @@ import AuthStack from './src/navigation/AuthStack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCallback, useEffect } from 'react';
 import { createUserTables, getUserDBConnection } from './src/persistence/sqlite';
+import { useFonts } from 'expo-font';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,10 @@ const App = () => {
   useEffect(() => {
     initializeDB();
   }, [initializeDB]);
+
+  const [fontsLoaded] = useFonts({
+    'Poppins-Medium': require('./src/assets/fonts/Poppins-Medium.ttf'),
+  });
 
   return (
     <NavigationContainer>

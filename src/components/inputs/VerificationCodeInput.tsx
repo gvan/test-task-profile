@@ -33,7 +33,7 @@ interface Code {
 }
 
 const CODE_LENGTH = 4;
-const { colors } = globalStyles;
+const { colors, fonts } = globalStyles;
 
 const CodeCell: React.FC<CodeCellProps> = (props) => {
 
@@ -187,6 +187,7 @@ const st = StyleSheet.create({
         fontSize: 16,
         color: colors.mainText,
         textAlign: 'center',
+        fontFamily: fonts.mainMedium,
     }
 });
 

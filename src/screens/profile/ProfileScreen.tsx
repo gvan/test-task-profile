@@ -11,8 +11,9 @@ import { AuthStackParamList } from "../../navigation/types";
 import InputError from "../../components/errors/InputError";
 import GlobalText from "../../assets/text/GlobalText";
 import { validateEmail } from "../../utils";
+import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker";
 
-const { colors } = globalStyles;
+const { colors, fonts } = globalStyles;
 const {errors} = GlobalText;
 
 type Props = RouteProp<AuthStackParamList, 'Profile'>;
@@ -28,6 +29,7 @@ const ProfileScreen: React.FC = () => {
     const [phone, setPhone] = useState('');
     const [position, setPosition] = useState('');
     const [skype, setSkype] = useState('');
+    const [avatar, setAvatar] = useState('');
 
     const [nameError, setNameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -63,7 +65,27 @@ const ProfileScreen: React.FC = () => {
                 skype: skype
             } as User;
 
-            const res = await userApi.updateUser(userParams);
+            const res = await userApi.updateUserInfo(userParams);
+            if(res.data) {
+                updateStateFields(res.data);
+            } else {
+                setGeneralError(res.error);
+            }
+        }
+    }
+
+    const onChangeAvatarPress = async () => {
+        const options = {
+            selectionLimit: 1,
+            mediaType: 'photo',
+        } as ImageLibraryOptions;
+
+        const result = await launchImageLibrary(options);
+        console.log(`result ${JSON.stringify(result)}`);
+        if(result.assets.length > 0) {
+            const asset = result.assets[0];
+            const res = await userApi.updateUserAvatar(user.id, asset.uri);
+            console.log(`update result ${JSON.stringify(res)}`);
             if(res.data) {
                 updateStateFields(res.data);
             } else {
@@ -79,6 +101,7 @@ const ProfileScreen: React.FC = () => {
         setPhone(user.phoneNumber);
         setPosition(user.position ? user.position : '');
         setSkype(user.skype ? user.skype : '');
+        setAvatar(user.avatar ? user.avatar : '');
     }
 
     const validateProfile = () => {
@@ -120,6 +143,14 @@ const ProfileScreen: React.FC = () => {
         return true;
     }
 
+    const getAvatarPath = () => {
+        if(!avatar || avatar === '') {
+            return require('../../assets/images/DefaultUser.png');
+        } else {
+            return {uri: avatar};
+        }
+    }
+
     return <SafeAreaView style={st.container}>
         <ScrollView  keyboardShouldPersistTaps='handled'>
             <View style={st.content}>
@@ -133,9 +164,10 @@ const ProfileScreen: React.FC = () => {
                     <View>
                         <Image
                             style={st.profileImage}
-                            source={require('../../assets/images/DefaultUser.png')} />
+                            source={getAvatarPath()} />
                         <TouchableOpacity
-                            style={st.profileEdit}>
+                            style={st.profileEdit}
+                            onPress={() => onChangeAvatarPress()}>
                             <Edit/>
                         </TouchableOpacity>
                     </View>
@@ -198,6 +230,7 @@ const st = StyleSheet.create({
         fontSize: 18,
         lineHeight: 27,
         color: colors.mainText,
+        fontFamily: fonts.mainMedium,
     },
     headerAction: {
         position: 'absolute',
@@ -207,6 +240,7 @@ const st = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         color: colors.primary,
+        fontFamily: fonts.mainMedium,
     },
     profileContainer: {
         alignItems: 'center',
@@ -215,6 +249,7 @@ const st = StyleSheet.create({
     profileImage: {
         width: 70,
         height: 70,
+        borderRadius: 70/2,
     },
     profileEdit: {
         position: 'absolute',
@@ -225,12 +260,14 @@ const st = StyleSheet.create({
         fontSize: 24,
         lineHeight: 36,
         color: colors.mainText,
-        marginTop: 10
+        fontFamily: fonts.mainMedium,
+        marginTop: 10,
     },
     profilePosition: {
         fontSize: 14,
         lineHeight: 21,
         color: colors.secondaryText,
+        fontFamily: fonts.mainMedium,
         marginTop: 3,
     }
 })

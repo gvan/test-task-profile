@@ -52,7 +52,19 @@ export const updateUserById = async (db: SQLiteDatabase, user: User): Promise<bo
     } catch (err) {
         return false;
     }
+}
 
+export const updateUserAvatarById = async(db: SQLiteDatabase, id: string, avatar: string): Promise<boolean> => {
+    try {
+        const query = `UPDATE ${TABLE_NAME} SET avatar='${avatar}' WHERE user_id='${id}';`;
+        const results = await db.executeSql(query);
+        if(results.length > 0 && results[0].rowsAffected === 1) {
+            return true;
+        }
+        return false;
+    } catch(err) {
+        return false;
+    }
 }
 
 export const getUserById = async (db: SQLiteDatabase, id: string): Promise<UserResponse> => {
@@ -106,6 +118,7 @@ const mapDBUserToUser = (user): User => {
         email: user.email,
         phoneNumber: user.phone_number,
         position: user.position,
-        skype: user.skype
+        skype: user.skype,
+        avatar: user.avatar,
     } as User;
 }

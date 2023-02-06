@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Logo } from "../../assets/icons";
 import globalStyles from "../../assets/styles/globalStyles";
 
-const {colors} = globalStyles;
+const {colors, fonts} = globalStyles;
 
 interface Props {
     title: string;
@@ -27,6 +27,7 @@ const st = StyleSheet.create({
         fontSize: 24,
         color: colors.mainText,
         lineHeight: 36,
+        fontFamily: fonts.mainMedium
     },
 });
 

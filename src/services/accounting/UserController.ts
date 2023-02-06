@@ -1,4 +1,4 @@
-import { getUserByCredentials, getUserByEmail, getUserById, getUserDBConnection, saveUser, updateUserById } from "../../persistence/sqlite";
+import { getUserByCredentials, getUserByEmail, getUserById, getUserDBConnection, saveUser, updateUserAvatarById, updateUserById } from "../../persistence/sqlite";
 import { UserResponse, UserSignUp } from "../../types";
 
 export const registerUser = async (user: UserSignUp): Promise<UserResponse> => {
@@ -55,8 +55,23 @@ export const updateUser = async (user: User): Promise<UserResponse> => {
 
     const db = await getUserDBConnection();
     const updated = await updateUserById(db, user);
-    if(updated) {
+    if (updated) {
         return getUserById(db, user.id);
+    } else {
+        return { error: 'Cannot update user' } as UserResponse;
+    }
+}
+
+export const updateUserAvatar = async (id: string, avatar: string): Promise<UserResponse> => {
+    if (!id || id === '' ||
+        !avatar || avatar === '') {
+        return { error: 'Invalid request' } as UserResponse;
+    }
+
+    const db = await getUserDBConnection();
+    const updated = await updateUserAvatarById(db, id, avatar);
+    if(updated) {
+        return getUserById(db, id);
     } else {
         return {error: 'Cannot update user'} as UserResponse;
     }

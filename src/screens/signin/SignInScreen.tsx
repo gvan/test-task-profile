@@ -13,7 +13,7 @@ import { UserSignUp } from "../../types";
 import { validateEmail, validatePassword } from "../../utils";
 import GlobalText from "../../assets/text/GlobalText";
 
-const { colors } = globalStyles;
+const { colors, fonts } = globalStyles;
 const {errors} = GlobalText;
 
 const SignInScreen = () => {
@@ -142,6 +142,7 @@ const st = StyleSheet.create({
         fontSize: 14,
         lineHeight: 21,
         color: colors.secondaryText,
+        fontFamily: fonts.mainMedium,
     },
     inputIcon: {
         position: 'absolute',

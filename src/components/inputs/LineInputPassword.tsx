@@ -15,7 +15,7 @@ export interface Props {
     blurOnSubmit: boolean;
 }
 
-const {colors} = globalStyles;
+const {colors, fonts} = globalStyles;
 
 const LineInputPassword: React.FC<Props> = (props) => {
 
@@ -61,17 +61,22 @@ const st = StyleSheet.create({
     input: {
         flex: 1,
         color: colors.mainText,
+        fontSize: 16,
+        lineHeight: 24,
+        fontFamily: fonts.mainMedium,
     },
     inputLabel: {
         fontSize: 14,
         lineHeight: 21,
         color: colors.secondaryText,
         marginTop: 40,
+        fontFamily: fonts.mainMedium,
     },
     inputError: {
         fontSize: 14,
         lineHeight: 21,
         color: colors.errorText,
+        fontFamily: fonts.mainMedium,
     }
 });
 

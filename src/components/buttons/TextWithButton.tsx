@@ -7,7 +7,7 @@ export interface Props {
     onPress:() => void;
 }
 
-const {colors} = globalStyles;
+const {colors, fonts} = globalStyles;
 
 const TextWithButton: React.FC<Props> = (props) => {
     return (<View style={st.textWithButton}>
@@ -28,11 +28,13 @@ const st = StyleSheet.create({
         fontSize: 14,
         lineHeight: 21,
         color: colors.secondaryText,
+        fontFamily: fonts.mainMedium,
     },
     primaryLabel: {
         fontSize: 14,
         lineHeight: 21,
         color: colors.primary,
+        fontFamily: fonts.mainMedium,
     }
 });
 

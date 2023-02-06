@@ -15,7 +15,7 @@ export interface Props {
     error: string;
 }
 
-const { colors } = globalStyles;
+const { colors, fonts } = globalStyles;
 
 const PhoneNumberInput: React.FC<Props> = (props) => {
 
@@ -102,7 +102,8 @@ const st = StyleSheet.create({
         fontSize: 14,
         lineHeight: 21,
         color: colors.secondaryText,
-        marginTop: 40
+        marginTop: 40,
+        fontFamily: fonts.mainMedium,
     },
     inputContainer: {
         flexDirection: 'row',
@@ -130,7 +131,8 @@ const st = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         color: colors.secondaryText,
-        marginEnd: 4
+        marginEnd: 4,
+        fontFamily: fonts.mainMedium,
     },
     phoneContainer: {
         flex: 1,
@@ -140,7 +142,10 @@ const st = StyleSheet.create({
     },
     phoneInput: {
         width: '100%',
-        fontSize: 16
+        fontSize: 16,
+        lineHeight: 24,
+        color: colors.mainText,
+        fontFamily: fonts.mainMedium,
     },
 });
 

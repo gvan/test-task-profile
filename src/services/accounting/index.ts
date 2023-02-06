@@ -1,3 +1,3 @@
-import { registerUser, loginUser, updateUser } from "./UserController";
+import { registerUser, loginUser, updateUser, updateUserAvatar } from "./UserController";
 
-export {registerUser, loginUser, updateUser};
+export {registerUser, loginUser, updateUser, updateUserAvatar};
