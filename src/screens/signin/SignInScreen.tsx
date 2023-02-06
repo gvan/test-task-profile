@@ -15,14 +15,14 @@ import GlobalText from "../../assets/text/GlobalText";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { colors, fonts } = globalStyles;
-const { errors } = GlobalText;
+const { messages } = GlobalText;
 
 const SignInScreen = () => {
 
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState('miketyson@gmail.com');
-    const [password, setPassword] = useState('Secret12');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -57,27 +57,27 @@ const SignInScreen = () => {
         setPasswordError('');
 
         if (email === '') {
-            setEmailError(errors.THIS_FIELD_CANNOT_BE_EMPTY);
+            setEmailError(messages.THIS_FIELD_CANNOT_BE_EMPTY);
             return false;
         }
 
         if (!validateEmail(email)) {
-            setEmailError(errors.INVALID_EMAIL_FORMAT);
+            setEmailError(messages.INVALID_EMAIL_FORMAT);
             return false;
         }
 
         if (password === '') {
-            setPasswordError(errors.THIS_FIELD_CANNOT_BE_EMPTY);
+            setPasswordError(messages.THIS_FIELD_CANNOT_BE_EMPTY);
             return false;
         }
 
         if (password.length < 8) {
-            setPasswordError(errors.PASSWORD_MIN);
+            setPasswordError(messages.PASSWORD_MIN);
             return false;
         }
 
         if (password.length > 32) {
-            setPasswordError(errors.PASSWORD_MAX);
+            setPasswordError(messages.PASSWORD_MAX);
             return false;
         }
         return true;

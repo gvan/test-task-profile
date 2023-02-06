@@ -54,6 +54,14 @@ const PhoneNumberInput: React.FC<Props> = (props) => {
         setShowCodePicker(false);
     }
 
+    const getReturnKeyType = () => {
+        if(Platform.OS === 'ios') {
+            return 'done'
+        } else {
+            return props.returnKeyType ? props.returnKeyType : 'done'
+        }
+    }
+
     return (<>
         <Text style={st.inputLabel}>{props.label}</Text>
         <View style={st.inputContainer}>
@@ -73,14 +81,14 @@ const PhoneNumberInput: React.FC<Props> = (props) => {
                     placeholder="345 567-23-56"
                     placeholderTextColor={colors.secondaryText}
                     style={[st.phoneInput, {marginTop: Platform.OS === 'android' ? 5 : 0}]}
-                    keyboardType="phone-pad"
+                    keyboardType='numeric'
                     textContentType="telephoneNumber"
                     dataDetectorTypes='phoneNumber'
                     maxLength={13}
                     value={phoneFormated}
                     onChangeText={onPhoneChange}
                     ref={props.inputRef}
-                    returnKeyType={props.returnKeyType ? props.returnKeyType : 'default'}
+                    returnKeyType={getReturnKeyType()}
                     blurOnSubmit={props.blurOnSubmit !== undefined ? props.blurOnSubmit : true}
                     onSubmitEditing={props.onSubmitEditing} />
             </View>

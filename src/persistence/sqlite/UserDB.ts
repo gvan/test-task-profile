@@ -22,7 +22,6 @@ export const createUserTables = async (db: SQLiteDatabase) => {
         avatar TEXT
     );`;
     await db.executeSql(query);
-    console.log(`createTables`);
 };
 
 export const saveUser = async (db: SQLiteDatabase, user: UserSignUp): Promise<number> => {

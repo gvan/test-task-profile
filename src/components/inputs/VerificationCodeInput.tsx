@@ -2,6 +2,7 @@ import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import globalStyles from "../../assets/styles/globalStyles";
 import { useEffect, useReducer, useRef, useState } from "react";
 import InputError from "../errors/InputError";
+import InputSuccess from "../success/InputSuccess";
 
 export interface Props {
     label: string;
@@ -11,6 +12,7 @@ export interface Props {
     onSubmitEditing: any;
     blurOnSubmit: boolean;
     error: string;
+    success: string;
 }
 
 interface CodeCellProps {
@@ -44,10 +46,14 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
     }
 
     const getReturnKeyType = () => {
-        if(props.index < CODE_LENGTH - 1) {
-            return "next";
+        if(Platform.OS === 'ios') {
+            return 'done'
         } else {
-            return props.returnKeyType ? props.returnKeyType : "default";
+            if(props.index < CODE_LENGTH - 1) {
+                return "next";
+            } else {
+                return props.returnKeyType ? props.returnKeyType : "default";
+            }
         }
     }
 
@@ -156,6 +162,7 @@ const VerificationCodeInput: React.FC<Props> = (props) => {
                 })}
             </View>
             {(props.error && props.error !== '') && <InputError>{props.error}</InputError>}
+            {(props.success && props.success !== '') && <InputSuccess>{props.success}</InputSuccess>}
         </>
     );
 }

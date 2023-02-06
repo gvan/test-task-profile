@@ -17,7 +17,7 @@ import { UserSignUp } from "../../types";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { colors } = globalStyles;
-const {errors} = GlobalText;
+const {messages} = GlobalText;
 
 const SignUpScreen = () => {
 
@@ -33,6 +33,7 @@ const SignUpScreen = () => {
 
     const [phoneError, setPhoneError] = useState('');
     const [codeError, setCodeError] = useState('');
+    const [codeSuccess, setCodeSuccess] = useState('');
     const [nameError, setNameError] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -76,14 +77,17 @@ const SignUpScreen = () => {
         setCodeVerified(codeValid);
         if(codeValid) {
             setCodeError('');
+            setCodeSuccess(messages.CODE_IS_VALID);
         } else {
-            setCodeError(errors.CODE_IS_NOT_VALID);
+            setCodeError(messages.CODE_IS_NOT_VALID);
+            setCodeSuccess('');
         }
     }
 
     const validateRegistrationForm = () => {
         setPhoneError('');
         setCodeError('');
+        setCodeSuccess('');
         setNameError('');
         setEmailError('');
         setPasswordError('');
@@ -91,87 +95,87 @@ const SignUpScreen = () => {
         setGeneralError('');
 
         if(phone === '') {
-            setPhoneError(errors.THIS_FIELS_IS_REQUIRED);
+            setPhoneError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(code === '') {
-            setCodeError(errors.THIS_FIELS_IS_REQUIRED);
+            setCodeError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(!codeVerified) {
-            setCodeError(errors.CODE_IS_NOT_VALID);
+            setCodeError(messages.CODE_IS_NOT_VALID);
             return false;
         }
 
         if(name === '') {
-            setNameError(errors.THIS_FIELS_IS_REQUIRED);
+            setNameError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(name.length < 3) {
-            setNameError(errors.NAME_MIN);
+            setNameError(messages.NAME_MIN);
             return false;
         }
 
         if(name.length > 64) {
-            setNameError(errors.NAME_MAX);
+            setNameError(messages.NAME_MAX);
             return false;
         }
 
         if(email === '') {
-            setEmailError(errors.THIS_FIELS_IS_REQUIRED);
+            setEmailError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(!validateEmail(email)) {
-            setEmailError(errors.INVALID_EMAIL_FORMAT);
+            setEmailError(messages.INVALID_EMAIL_FORMAT);
             return false;
         }
 
         if(password === '') {
-            setPasswordError(errors.THIS_FIELS_IS_REQUIRED);
+            setPasswordError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(password.length < 8) {
-            setPasswordError(errors.PASSWORD_MIN);
+            setPasswordError(messages.PASSWORD_MIN);
             return false;
         }
 
         if(password.length > 32) {
-            setPasswordError(errors.PASSWORD_MAX);
+            setPasswordError(messages.PASSWORD_MAX);
             return false;
         }
 
         if(!validatePassword(password)) {
-            setPasswordError(errors.INVALID_PASSWORD_FORMAT);
+            setPasswordError(messages.INVALID_PASSWORD_FORMAT);
             return false;
         }
 
         if(confirmPassword === '') {
-            setConfirmPasswordError(errors.THIS_FIELS_IS_REQUIRED);
+            setConfirmPasswordError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(confirmPassword.length < 8) {
-            setConfirmPasswordError(errors.PASSWORD_MIN);
+            setConfirmPasswordError(messages.PASSWORD_MIN);
             return false;
         }
 
         if(confirmPassword.length > 32) {
-            setConfirmPasswordError(errors.PASSWORD_MAX);
+            setConfirmPasswordError(messages.PASSWORD_MAX);
             return false;
         }
 
         if(!validatePassword(confirmPassword)) {
-            setConfirmPasswordError(errors.INVALID_PASSWORD_FORMAT);
+            setConfirmPasswordError(messages.INVALID_PASSWORD_FORMAT);
             return false;
         }
 
         if(password != confirmPassword) {
-            setConfirmPasswordError(errors.PASSWORDS_DO_NOT_MATCH);
+            setConfirmPasswordError(messages.PASSWORDS_DO_NOT_MATCH);
             return false;
         }
 
@@ -200,7 +204,8 @@ const SignUpScreen = () => {
                         inputRef={codeRef}
                         onSubmitEditing={onCodeSubmitEditing}
                         blurOnSubmit={false}
-                        error={codeError}/>
+                        error={codeError}
+                        success={codeSuccess}/>
                     <LineInput
                         label='Your Name'
                         placeholder="John Doe"

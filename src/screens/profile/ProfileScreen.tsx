@@ -15,7 +15,7 @@ import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-pick
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { colors, fonts } = globalStyles;
-const {errors} = GlobalText;
+const {messages} = GlobalText;
 
 type Props = RouteProp<AuthStackParamList, 'Profile'>;
 
@@ -116,32 +116,32 @@ const ProfileScreen: React.FC = () => {
         setGeneralError('');
 
         if(name === '') {
-            setNameError(errors.THIS_FIELS_IS_REQUIRED);
+            setNameError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(name.length < 3) {
-            setNameError(errors.NAME_MIN);
+            setNameError(messages.NAME_MIN);
             return false;
         }
 
         if(name.length > 64) {
-            setNameError(errors.NAME_MAX);
+            setNameError(messages.NAME_MAX);
             return false;
         }
 
         if(email === '') {
-            setEmailError(errors.THIS_FIELS_IS_REQUIRED);
+            setEmailError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
         if(!validateEmail(email)) {
-            setEmailError(errors.INVALID_EMAIL_FORMAT);
+            setEmailError(messages.INVALID_EMAIL_FORMAT);
             return false;
         }
 
         if(phone === '') {
-            setPhoneError(errors.THIS_FIELS_IS_REQUIRED);
+            setPhoneError(messages.THIS_FIELS_IS_REQUIRED);
             return false;
         }
 
