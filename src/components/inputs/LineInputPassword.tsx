@@ -30,7 +30,7 @@ const LineInputPassword: React.FC<Props> = (props) => {
         <View style={st.inputContainer}>
             <TextInput
                 placeholder={props.placeholder}
-                placeholderTextColor={colors.mainText}
+                placeholderTextColor={colors.secondaryText}
                 secureTextEntry={secureText}
                 autoCapitalize="none"
                 returnKeyType={props.returnKeyType}

@@ -46,6 +46,23 @@ const SignUpScreen = () => {
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
 
+    useEffect(() => {
+        const validateCode = async () => {
+            if(code && code !== '') {
+                const codeValid = await userApi.checkVerificationCode(phone, code);
+                setCodeVerified(codeValid);
+                if(codeValid) {
+                    setCodeError('');
+                    setCodeSuccess(messages.CODE_IS_VALID);
+                } else {
+                    setCodeError(messages.CODE_IS_NOT_VALID);
+                    setCodeSuccess('');
+                }
+            }
+        }
+        validateCode();
+    }, [code])
+
     const onSignInPress = () => {
         navigation.goBack();
     }
@@ -68,19 +85,6 @@ const SignUpScreen = () => {
             } else {
                 setGeneralError(res.error);
             }
-        }
-    }
-
-    const onCodeSubmitEditing = async () => {
-        nameRef.current.focus();
-        const codeValid = await userApi.checkVerificationCode(phone, code);
-        setCodeVerified(codeValid);
-        if(codeValid) {
-            setCodeError('');
-            setCodeSuccess(messages.CODE_IS_VALID);
-        } else {
-            setCodeError(messages.CODE_IS_NOT_VALID);
-            setCodeSuccess('');
         }
     }
 
@@ -202,7 +206,7 @@ const SignUpScreen = () => {
                         setCode={setCode}
                         returnKeyType="next"
                         inputRef={codeRef}
-                        onSubmitEditing={onCodeSubmitEditing}
+                        onSubmitEditing={() => nameRef.current.focus()}
                         blurOnSubmit={false}
                         error={codeError}
                         success={codeSuccess}/>

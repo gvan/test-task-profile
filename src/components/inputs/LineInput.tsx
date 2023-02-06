@@ -25,7 +25,7 @@ const LineInput: React.FC<Props> = (props) => {
         <View style={st.inputContainer}>
             <TextInput
                 placeholder={props.placeholder}
-                placeholderTextColor={colors.mainText}
+                placeholderTextColor={colors.secondaryText}
                 autoCapitalize={props.autoCapitalize ? props.autoCapitalize : 'sentences'}
                 keyboardType={props.keyboardType ? props.keyboardType : 'default'}
                 returnKeyType={props.returnKeyType ? props.returnKeyType : 'default'}
