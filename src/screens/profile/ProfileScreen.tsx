@@ -12,6 +12,7 @@ import InputError from "../../components/errors/InputError";
 import GlobalText from "../../assets/text/GlobalText";
 import { validateEmail } from "../../utils";
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { colors, fonts } = globalStyles;
 const {errors} = GlobalText;
@@ -152,7 +153,9 @@ const ProfileScreen: React.FC = () => {
     }
 
     return <SafeAreaView style={st.container}>
-        <ScrollView  keyboardShouldPersistTaps='handled'>
+        <KeyboardAwareScrollView  
+            keyboardShouldPersistTaps='handled'
+            showsVerticalScrollIndicator={false}>
             <View style={st.content}>
                 <View style={st.headerContainer}>
                     <Text style={st.headerTitle}>{'Edit Profile'}</Text>
@@ -206,7 +209,7 @@ const ProfileScreen: React.FC = () => {
                     text="Save"
                     onPress={() => onSavePress()}/>
             </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     </SafeAreaView>
 }
 

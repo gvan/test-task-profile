@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { EyeClose, EyeOpen, Logo } from "../../assets/icons"
 import globalStyles from "../../assets/styles/globalStyles"
 import { useRef, useState } from "react";
@@ -12,9 +12,10 @@ import userApi from "../../services/api/UserApi";
 import { UserSignUp } from "../../types";
 import { validateEmail, validatePassword } from "../../utils";
 import GlobalText from "../../assets/text/GlobalText";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { colors, fonts } = globalStyles;
-const {errors} = GlobalText;
+const { errors } = GlobalText;
 
 const SignInScreen = () => {
 
@@ -29,13 +30,13 @@ const SignInScreen = () => {
     const passwordRef = useRef();
 
     const onLoginPress = async () => {
-        if(validateLoginForm()) {
+        if (validateLoginForm()) {
             const res = await userApi.loginUser(email, password);
-            
-            if(res.data) {
+
+            if (res.data) {
                 navigation.reset({
                     index: 0,
-                    routes: [{name: 'Profile', params: {userId: res.data.id}}],
+                    routes: [{ name: 'Profile', params: { userId: res.data.id } }],
                 });
             } else {
                 setEmailError(res.error);
@@ -55,27 +56,27 @@ const SignInScreen = () => {
         setEmailError('');
         setPasswordError('');
 
-        if(email === '') {
+        if (email === '') {
             setEmailError(errors.THIS_FIELD_CANNOT_BE_EMPTY);
             return false;
         }
 
-        if(!validateEmail(email)) {
+        if (!validateEmail(email)) {
             setEmailError(errors.INVALID_EMAIL_FORMAT);
             return false;
         }
 
-        if(password === '') {
+        if (password === '') {
             setPasswordError(errors.THIS_FIELD_CANNOT_BE_EMPTY);
             return false;
         }
 
-        if(password.length < 8) {
+        if (password.length < 8) {
             setPasswordError(errors.PASSWORD_MIN);
             return false;
         }
 
-        if(password.length > 32) {
+        if (password.length > 32) {
             setPasswordError(errors.PASSWORD_MAX);
             return false;
         }
@@ -83,7 +84,9 @@ const SignInScreen = () => {
     }
 
     return <SafeAreaView style={st.container}>
-        <ScrollView keyboardShouldPersistTaps='handled'>
+        <KeyboardAwareScrollView 
+            keyboardShouldPersistTaps='handled'
+            showsVerticalScrollIndicator={false}>
             <View>
                 <BrandingHeader
                     title='Log In To Woorkroom' />
@@ -106,7 +109,7 @@ const SignInScreen = () => {
                         value={password}
                         setValue={setPassword}
                         error={passwordError}
-                        inputRef={passwordRef}/>
+                        inputRef={passwordRef} />
                     <TouchableOpacity style={st.textButton} >
                         <Text style={st.secondaryLabel}>{'Forgot password?'}</Text>
                     </TouchableOpacity>
@@ -116,10 +119,10 @@ const SignInScreen = () => {
                     <TextWithButton
                         text='New User?'
                         buttonText='Create Account'
-                        onPress={onCreateAccountPress}/>
+                        onPress={onCreateAccountPress} />
                 </View>
             </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     </SafeAreaView>
 }
 

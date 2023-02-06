@@ -14,6 +14,7 @@ import GlobalText from "../../assets/text/GlobalText";
 import { validateEmail, validatePassword } from "../../utils";
 import InputError from "../../components/errors/InputError";
 import { UserSignUp } from "../../types";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { colors } = globalStyles;
 const {errors} = GlobalText;
@@ -161,7 +162,9 @@ const SignUpScreen = () => {
     }
 
     return <SafeAreaView style={st.container}>
-        <ScrollView keyboardShouldPersistTaps='handled'>
+        <KeyboardAwareScrollView 
+            keyboardShouldPersistTaps='handled' 
+            showsVerticalScrollIndicator={false}>
             <View>
                 <BrandingHeader
                     title="Sign Up To Woorkroom" />
@@ -233,7 +236,7 @@ const SignUpScreen = () => {
                 </View>
 
             </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
     </SafeAreaView>
 };
