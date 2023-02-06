@@ -25,6 +25,7 @@ const SignUpScreen = () => {
 
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState(0);
+    const [codeVerified, setCodeVerified] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -69,6 +70,17 @@ const SignUpScreen = () => {
         }
     }
 
+    const onCodeSubmitEditing = async () => {
+        nameRef.current.focus();
+        const codeValid = await userApi.checkVerificationCode(phone, code);
+        setCodeVerified(codeValid);
+        if(codeValid) {
+            setCodeError('');
+        } else {
+            setCodeError(errors.CODE_IS_NOT_VALID);
+        }
+    }
+
     const validateRegistrationForm = () => {
         setPhoneError('');
         setCodeError('');
@@ -85,6 +97,11 @@ const SignUpScreen = () => {
 
         if(code === '') {
             setCodeError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
+
+        if(!codeVerified) {
+            setCodeError(errors.CODE_IS_NOT_VALID);
             return false;
         }
 
@@ -181,7 +198,7 @@ const SignUpScreen = () => {
                         setCode={setCode}
                         returnKeyType="next"
                         inputRef={codeRef}
-                        onSubmitEditing={() => nameRef.current.focus()}
+                        onSubmitEditing={onCodeSubmitEditing}
                         blurOnSubmit={false}
                         error={codeError}/>
                     <LineInput

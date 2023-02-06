@@ -41,7 +41,6 @@ const ProfileScreen: React.FC = () => {
         const fetchUser = async () => {
             const res = await userApi.getUser(route.params.userId);
             if(res.data) {
-                console.log(`avatar ${res.data.avatar}`);
                 updateStateFields(res.data);
             } else {
                 setGeneralError(res.error);
@@ -66,7 +65,8 @@ const ProfileScreen: React.FC = () => {
                 email: email,
                 phoneNumber: phone,
                 position: position,
-                skype: skype
+                skype: skype,
+                avatar: avatar,
             } as User;
 
             const res = await userApi.updateUserInfo(userParams);
@@ -82,14 +82,15 @@ const ProfileScreen: React.FC = () => {
         const options = {
             selectionLimit: 1,
             mediaType: 'photo',
+            includeBase64: true,
+            maxWidth: 400,
+            maxHeight: 400,
         } as ImageLibraryOptions;
 
         const result = await launchImageLibrary(options);
-        console.log(`result ${JSON.stringify(result)}`);
         if(result.assets.length > 0) {
             const asset = result.assets[0];
-            const res = await userApi.updateUserAvatar(user.id, asset.uri);
-            console.log(`update result ${JSON.stringify(res)}`);
+            const res = await userApi.updateUserAvatar(user.id, asset.base64);
             if(res.data) {
                 updateStateFields(res.data);
             } else {
@@ -148,10 +149,10 @@ const ProfileScreen: React.FC = () => {
     }
 
     const getAvatarPath = () => {
-        if(!avatar || avatar === '') {
+        if(!avatar || avatar === 'null' || avatar === '') {
             return require('../../assets/images/DefaultUser.png');
         } else {
-            return {uri: avatar};
+            return {uri: `data:image/png;base64,${avatar}`};
         }
     }
 
@@ -206,6 +207,7 @@ const ProfileScreen: React.FC = () => {
                 <LineInput
                     label="Skype"
                     value={skype}
+                    autoCapitalize="none"
                     setValue={setSkype}/>
                 {(generalError && generalError !== '') && <InputError>{generalError}</InputError>}
                 <RoundedButton

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import globalStyles from "../../assets/styles/globalStyles";
 import { useEffect, useReducer, useRef, useState } from "react";
 import InputError from "../errors/InputError";
@@ -68,7 +68,7 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
                 onKeyPress={onKeyPress}
                 maxLength={1}
                 keyboardType='numeric'
-                style={[st.codeCellInput]}
+                style={[st.codeCellInput, {marginTop: Platform.OS === 'android' ? 5 : 0}]}
                 ref={props.codeRef}
                 returnKeyType={getReturnKeyType()}
                 onSubmitEditing={props.onSubmitEditing}
@@ -166,6 +166,7 @@ const st = StyleSheet.create({
         lineHeight: 21,
         color: colors.secondaryText,
         marginTop: 40,
+        fontFamily: fonts.mainMedium,
     },
     codeContainer: {
         flexDirection: 'row',

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import globalStyles from "../../assets/styles/globalStyles";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "../../assets/icons";
@@ -72,7 +72,7 @@ const PhoneNumberInput: React.FC<Props> = (props) => {
                 <TextInput
                     placeholder="345 567-23-56"
                     placeholderTextColor={colors.secondaryText}
-                    style={st.phoneInput}
+                    style={[st.phoneInput, {marginTop: Platform.OS === 'android' ? 5 : 0}]}
                     keyboardType="phone-pad"
                     textContentType="telephoneNumber"
                     dataDetectorTypes='phoneNumber'
@@ -144,6 +144,7 @@ const st = StyleSheet.create({
         width: '100%',
         height: '100%',
         fontSize: 16,
+        lineHeight: 24,
         color: colors.mainText,
         fontFamily: fonts.mainMedium,
     },

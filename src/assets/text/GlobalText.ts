@@ -9,7 +9,8 @@ const GlobalText = {
         PASSWORD_MIN: 'Password must have at least 8 characters',
         PASSWORD_MAX: 'Password can contain up to 32 characters',
         INVALID_PASSWORD_FORMAT: 'Your password needs to include at leas one number and both lower and upper case characters',
-        PASSWORDS_DO_NOT_MATCH: 'Passwords do not match'
+        PASSWORDS_DO_NOT_MATCH: 'Passwords do not match',
+        CODE_IS_NOT_VALID: 'Code is not valid',
     }
 }
 

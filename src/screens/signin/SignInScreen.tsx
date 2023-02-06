@@ -21,7 +21,7 @@ const SignInScreen = () => {
 
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState('ihan@gmail.com');
+    const [email, setEmail] = useState('miketyson@gmail.com');
     const [password, setPassword] = useState('Secret12');
 
     const [emailError, setEmailError] = useState('');
@@ -115,11 +115,11 @@ const SignInScreen = () => {
                     </TouchableOpacity>
                     <RoundedButton
                         text="Log In"
-                        onPress={onLoginPress} />
+                        onPress={() => onLoginPress()} />
                     <TextWithButton
                         text='New User?'
                         buttonText='Create Account'
-                        onPress={onCreateAccountPress} />
+                        onPress={() => onCreateAccountPress()} />
                 </View>
             </View>
         </KeyboardAwareScrollView>
