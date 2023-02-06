@@ -7,7 +7,7 @@ const TABLE_NAME = 'users';
 enablePromise(true);
 
 export const getUserDBConnection = async () => {
-    return openDatabase({name: DB_NAME, location: 'default'});
+    return openDatabase({ name: DB_NAME, location: 'default' });
 };
 
 export const createUserTables = async (db: SQLiteDatabase) => {
@@ -31,25 +31,41 @@ export const saveUser = async (db: SQLiteDatabase, user: UserSignUp): Promise<nu
         ('${user.name}', '${user.email}', '${user.password}', 
             '${user.phoneNumber}');`;
     const results = await db.executeSql(query);
-    if(results.length > 0) {
-        if(results[0].rowsAffected === 1) {
+    if (results.length > 0) {
+        if (results[0].rowsAffected === 1) {
             return results[0].insertId;
         }
     }
     return null;
 }
 
+export const updateUserById = async (db: SQLiteDatabase, user: User): Promise<boolean> => {
+    try {
+        const query = `UPDATE ${TABLE_NAME} SET name='${user.name}', email='${user.email}', 
+            phone_number='${user.phoneNumber}', position='${user.position}', 
+            skype='${user.skype}', avatar='${user.avatar}' WHERE user_id='${user.id}';`;
+        const results = await db.executeSql(query);
+        if (results.length > 0 && results[0].rowsAffected === 1) {
+            return true;
+        }
+        return false;
+    } catch (err) {
+        return false;
+    }
+
+}
+
 export const getUserById = async (db: SQLiteDatabase, id: string): Promise<UserResponse> => {
     try {
         const query = `SELECT * FROM ${TABLE_NAME} WHERE user_id='${id}';`;
         const results = await db.executeSql(query);
-        if(results.length > 0 && results[0].rows.length > 0) {
+        if (results.length > 0 && results[0].rows.length > 0) {
             const user = results[0].rows.item(0);
-            return {data: mapDBUserToUser(user)} as UserResponse;
+            return { data: mapDBUserToUser(user) } as UserResponse;
         }
-        return {error: 'UserId is incorrect'} as UserResponse;
-    } catch(err) {
-        return {error: 'Internal error'} as UserResponse;
+        return { error: 'UserId is incorrect' } as UserResponse;
+    } catch (err) {
+        return { error: 'Internal error' } as UserResponse;
     }
 }
 
@@ -57,13 +73,13 @@ export const getUserByEmail = async (db: SQLiteDatabase, email: string): Promise
     try {
         const query = `SELECT * FROM ${TABLE_NAME} WHERE email='${email}'`;
         const results = await db.executeSql(query);
-        if(results.length > 0 && results[0].rows.length > 0) {
+        if (results.length > 0 && results[0].rows.length > 0) {
             const user = results[0].rows.item(0);
-            return {data: mapDBUserToUser(user)} as UserResponse;
+            return { data: mapDBUserToUser(user) } as UserResponse;
         }
-        return {error: 'Email is incorrect'} as UserResponse;
-    } catch(err) {
-        return {error: 'Internal error'} as UserResponse;
+        return { error: 'Email is incorrect' } as UserResponse;
+    } catch (err) {
+        return { error: 'Internal error' } as UserResponse;
     }
 }
 
@@ -71,15 +87,15 @@ export const getUserByCredentials = async (db: SQLiteDatabase, email: string, pa
     try {
         const query = `SELECT * FROM ${TABLE_NAME} WHERE email='${email}' AND password='${password}';`;
         const results = await db.executeSql(query);
-        if(results.length > 0) {
-            if(results[0].rows.length > 0) {
+        if (results.length > 0) {
+            if (results[0].rows.length > 0) {
                 const user = results[0].rows.item(0);
-                return {data: mapDBUserToUser(user)} as UserResponse;
+                return { data: mapDBUserToUser(user) } as UserResponse;
             }
         }
-        return {error: 'Incorrect email or password'} as UserResponse;
-    } catch(err) {
-        return {error: 'Internal error'} as UserResponse;
+        return { error: 'Incorrect email or password' } as UserResponse;
+    } catch (err) {
+        return { error: 'Internal error' } as UserResponse;
     }
 }
 

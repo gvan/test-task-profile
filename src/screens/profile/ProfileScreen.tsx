@@ -3,30 +3,47 @@ import globalStyles from "../../assets/styles/globalStyles"
 import { Edit } from "../../assets/icons";
 import { User } from "../../types";
 import LineInput from "../../components/inputs/LineInput";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RoundedButton from "../../components/buttons/RoundedButton";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import userApi from "../../services/api/UserApi";
+import { AuthStackParamList } from "../../navigation/types";
+import InputError from "../../components/errors/InputError";
+import GlobalText from "../../assets/text/GlobalText";
+import { validateEmail } from "../../utils";
 
 const { colors } = globalStyles;
+const {errors} = GlobalText;
 
-const ProfileScreen = () => {
+type Props = RouteProp<AuthStackParamList, 'Profile'>;
+
+const ProfileScreen: React.FC = () => {
 
     const navigation = useNavigation();
+    const route = useRoute<Props>();
 
-    const user = {
-        name: 'Mike Tyson',
-        email: 'miketyson@gmail.com',
-        phoneCode: '+440',
-        phoneNumber: '96556954',
-        position: 'UI/UX Designer',
-        skype: 'live-miketyson98'
-    } as User;
+    const [user, setUser] = useState({});
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [position, setPosition] = useState('');
+    const [skype, setSkype] = useState('');
 
-    const [name, setName] = useState(user.name);
-    const [email, setEmail] = useState(user.email);
-    const [phone, setPhone] = useState(user.phoneNumber);
-    const [position, setPosition] = useState(user.position);
-    const [skype, setSkype] = useState(user.skype);
+    const [nameError, setNameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+    const [generalError, setGeneralError] = useState('');
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await userApi.getUser(route.params.userId);
+            if(res.data) {
+                updateStateFields(res.data);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     const onLogOutPress = () => {
         navigation.reset({
@@ -35,12 +52,76 @@ const ProfileScreen = () => {
         });
     }
 
-    const onSavePress = () => {
+    const onSavePress = async () => {
+        if(validateProfile()) {
+            const userParams = {
+                ...user,
+                name: name,
+                email: email,
+                phoneNumber: phone,
+                position: position,
+                skype: skype
+            } as User;
 
+            const res = await userApi.updateUser(userParams);
+            if(res.data) {
+                updateStateFields(res.data);
+            } else {
+                setGeneralError(res.error);
+            }
+        }
+    }
+
+    const updateStateFields = (user: user) => {
+        setUser(user);
+        setName(user.name);
+        setEmail(user.email);
+        setPhone(user.phoneNumber);
+        setPosition(user.position ? user.position : '');
+        setSkype(user.skype ? user.skype : '');
+    }
+
+    const validateProfile = () => {
+        setNameError('');
+        setEmailError('');
+        setPhoneError('');
+        setGeneralError('');
+
+        if(name === '') {
+            setNameError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
+
+        if(name.length < 3) {
+            setNameError(errors.NAME_MIN);
+            return false;
+        }
+
+        if(name.length > 64) {
+            setNameError(errors.NAME_MAX);
+            return false;
+        }
+
+        if(email === '') {
+            setEmailError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
+
+        if(!validateEmail(email)) {
+            setEmailError(errors.INVALID_EMAIL_FORMAT);
+            return false;
+        }
+
+        if(phone === '') {
+            setPhoneError(errors.THIS_FIELS_IS_REQUIRED);
+            return false;
+        }
+
+        return true;
     }
 
     return <SafeAreaView style={st.container}>
-        <ScrollView>
+        <ScrollView  keyboardShouldPersistTaps='handled'>
             <View style={st.content}>
                 <View style={st.headerContainer}>
                     <Text style={st.headerTitle}>{'Edit Profile'}</Text>
@@ -63,17 +144,23 @@ const ProfileScreen = () => {
                 </View>
                 <LineInput
                     label="Name"
+                    autoCapitalize="words"
                     value={name}
                     setValue={setName}
-                    labelStyle={{marginTop: 30}}/>
+                    labelStyle={{marginTop: 30}}
+                    error={nameError}/>
                 <LineInput
                     label="Email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
                     value={email}
-                    setValue={setEmail}/>
+                    setValue={setEmail}
+                    error={emailError}/>
                 <LineInput
                     label="Phone"
                     value={phone}
-                    setValue={setPhone}/>
+                    setValue={setPhone}
+                    error={phoneError}/>
                 <LineInput
                     label="Position"
                     value={position}
@@ -82,9 +169,10 @@ const ProfileScreen = () => {
                     label="Skype"
                     value={skype}
                     setValue={setSkype}/>
+                {(generalError && generalError !== '') && <InputError>{generalError}</InputError>}
                 <RoundedButton
                     text="Save"
-                    onPress={onSavePress}/>
+                    onPress={() => onSavePress()}/>
             </View>
         </ScrollView>
     </SafeAreaView>

@@ -2,8 +2,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInScreen from "../screens/signin/SignInScreen";
 import SignUpScreen from "../screens/signup/SignUpScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
+import { AuthStackParamList } from "./types";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthStack = () => {
     return (

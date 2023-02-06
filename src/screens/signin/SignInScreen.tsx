@@ -20,8 +20,8 @@ const SignInScreen = () => {
 
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState('ivan1@gmail.com');
-    const [password, setPassword] = useState('password');
+    const [email, setEmail] = useState('ihan@gmail.com');
+    const [password, setPassword] = useState('Secret12');
 
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -31,11 +31,11 @@ const SignInScreen = () => {
     const onLoginPress = async () => {
         if(validateLoginForm()) {
             const res = await userApi.loginUser(email, password);
-            console.log(`res ${JSON.stringify(res)}`)
+            
             if(res.data) {
                 navigation.reset({
                     index: 0,
-                    routes: [{name: 'Profile'}],
+                    routes: [{name: 'Profile', params: {userId: res.data.id}}],
                 });
             } else {
                 setEmailError(res.error);

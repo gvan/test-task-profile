@@ -48,7 +48,6 @@ const SignUpScreen = () => {
     }
 
     const onNextPress = async () => {
-        console.log('onNextPress');
         if(validateRegistrationForm()) {
             const user = {
                 name: name,
@@ -56,13 +55,12 @@ const SignUpScreen = () => {
                 password: password,
                 phoneNumber: phone
             } as UserSignUp;
-            console.log(`user ${JSON.stringify(user)}`);
             const res = await userApi.registerUser(user);
-            console.log(`register response ${JSON.stringify(res)}`);
+
             if(res.data) {
                 navigation.reset({
                     index: 0,
-                    routes: [{name: 'Profile'}],
+                    routes: [{name: 'Profile', params: {userId: res.data.id}}],
                 });
             } else {
                 setGeneralError(res.error);
@@ -80,7 +78,6 @@ const SignUpScreen = () => {
         setGeneralError('');
 
         if(phone === '') {
-            console.log(`setPhoneError`);
             setPhoneError(errors.THIS_FIELS_IS_REQUIRED);
             return false;
         }
@@ -187,6 +184,7 @@ const SignUpScreen = () => {
                     <LineInput
                         label='Your Name'
                         placeholder="John Doe"
+                        autoCapitalize="words"
                         value={name}
                         setValue={setName}
                         returnKeyType="next"
