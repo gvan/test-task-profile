@@ -142,8 +142,8 @@ const st = StyleSheet.create({
     },
     phoneInput: {
         width: '100%',
+        height: '100%',
         fontSize: 16,
-        lineHeight: 24,
         color: colors.mainText,
         fontFamily: fonts.mainMedium,
     },

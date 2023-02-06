@@ -4,8 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useCallback, useEffect } from 'react';
 import { createUserTables, getUserDBConnection } from './src/persistence/sqlite';
 import { useFonts } from 'expo-font';
+import { StyleSheet, View } from 'react-native';
+import globalStyles from './src/assets/styles/globalStyles';
 
 const Stack = createNativeStackNavigator();
+const {colors} = globalStyles;
 
 const App = () => {
 
@@ -20,7 +23,11 @@ const App = () => {
 
   const [fontsLoaded] = useFonts({
     'Poppins-Medium': require('./src/assets/fonts/Poppins-Medium.ttf'),
-  });
+  });  
+  
+  if (!fontsLoaded) {
+    return <View style={st.splash}></View>;
+  }
 
   return (
     <NavigationContainer>
@@ -33,5 +40,12 @@ const App = () => {
     </NavigationContainer>
   );
 }
+
+const st = StyleSheet.create({
+  splash: {
+    flex: 1,
+    backgroundColor: colors.background,
+  }
+})
 
 export default App;

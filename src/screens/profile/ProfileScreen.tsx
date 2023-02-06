@@ -41,7 +41,10 @@ const ProfileScreen: React.FC = () => {
         const fetchUser = async () => {
             const res = await userApi.getUser(route.params.userId);
             if(res.data) {
+                console.log(`avatar ${res.data.avatar}`);
                 updateStateFields(res.data);
+            } else {
+                setGeneralError(res.error);
             }
         };
 
