@@ -13,7 +13,6 @@ const {colors} = globalStyles;
 const App = () => {
 
   const initializeDB = useCallback(async () => {
-    console.log(`app was refreshed`);
     const db = await getUserDBConnection();
     await createUserTables(db);
   }, []);
